@@ -1,17 +1,6 @@
 import csv
-import matplotlib.pyplot as plt   
-
-# Filsti til CSV-fila
-filsti = r"C:\Users\prowo\OneDrive - Universitetet i Stavanger\UiS\UiS\semester_1\DAT120\koding\inlerveringer\inlevering 7\sinnes_2014_2025.csv"
-
-def safe_int(x):
-    try:
-        return int(x)
-    except:
-        return 0
-
-data = []
-print("Prøver å åpne:", filsti)
+ 
+filsti = r"sinnes_2014_2025.csv"
 
 try:
     with open(filsti, encoding="utf-8") as f:
@@ -21,45 +10,29 @@ except FileNotFoundError:
     print("Fant ikke fila. Sjekk at stien er riktig og at du kjører scriptet fra riktig mappe.")
     exit()
 
-# Finn alle mulige år
-alle_år = set()
-
-for rad in data:
-    dato = rad.get("Tid(norsk normaltid)", "").strip()
-    if not dato:
-        continue
-
-    deler = dato.split(".")
-    if len(deler) != 3:
-        continue
-
-    år = deler[2]
-    alle_år.add(år)
-
-alle_år = sorted(alle_år)
+alle_år = sorted({
+    rad["Tid(norsk normaltid)"].split(".")[2]
+    for rad in data
+    if len(rad["Tid(norsk normaltid)"].split(".")) == 3
+})
 
 print("Mulige år du kan skrive inn:")
 for år in alle_år:
     print(" -", år)
 
-valgt_år = input("Skriv inn et år: ").strip()
+valgt_år = int(input("Skriv inn et år: ").strip())
 
 skisesong_dager = []
-
 for rad in data:
     dato = rad["Tid(norsk normaltid)"].strip()
     deler = dato.split(".")
-
     if len(deler) != 3:
-        continue  
+        continue
 
-    dag = int(deler[0])
-    måned = int(deler[1])
-    år = int(deler[2])
+    dag, måned, år = map(int, deler)
 
-    if måned in (11, 12) and år == int(valgt_år) - 1:
-        skisesong_dager.append(rad)
-    elif måned in (1, 2, 3, 4, 5) and år == int(valgt_år):
+    # Skisesong-regel
+    if (måned in (11, 12) and år == valgt_år - 1) or (måned in (1, 2, 3, 4, 5) and år == valgt_år):
         skisesong_dager.append(rad)
 antall_skifore = 0
 
@@ -76,4 +49,3 @@ for rad in skisesong_dager:
 print(f"Antall dager med skiføre i skisesongen {valgt_år}: {antall_skifore}")
 
 
-dgfdsfs
