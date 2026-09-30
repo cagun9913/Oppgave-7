@@ -14,6 +14,8 @@ with open(filnavn, 'r', encoding='utf-8') as fila:
     for linje in fila:
         data = linje.strip().split(';')
         if data[2].endswith(dato):
+            if data[3] == '-':
+                continue
             maxtemp = data[3]
             maxtemp = maxtemp.replace(',', '.')
             maxtemp = float(maxtemp)
