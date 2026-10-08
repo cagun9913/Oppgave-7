@@ -5,18 +5,19 @@
 
 filnavn = r'øvingsoppgave 7\Oppgave-7\sinnes_2014_2025_med_makstemperatur.csv'
 dato = input('skriv inn et valgfritt år fra 2014-2025: ')
-#dato = dato.replace(',', '.')
+
 aarlig_vekst = []
 dager_uten_vekst = 0
+
 with open(filnavn, 'r', encoding='utf-8') as fila:
     fila.readline()
 
     for linje in fila:
         data = linje.strip().split(';')
         if data[2].endswith(dato):
-            if data[3] == '-':
+            if data[4] == '-':
                 continue
-            maxtemp = data[3]
+            maxtemp = data[4]
             maxtemp = maxtemp.replace(',', '.')
             maxtemp = float(maxtemp)
             mintemp = 5.0
