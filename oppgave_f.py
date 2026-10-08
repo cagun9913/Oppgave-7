@@ -3,7 +3,7 @@
 # kan regne at planten sin vekst en gitt dag er lik temperatur minus
 # minimumstemperaturen. Beregn total plantevekst et gitt år.
 
-filnavn = r'sinnes_2014_2025_med_makstemperatur.csv'
+filnavn = r'øvingsoppgave 7\Oppgave-7\sinnes_2014_2025_med_makstemperatur.csv'
 dato = input('skriv inn et valgfritt år fra 2014-2025: ')
 #dato = dato.replace(',', '.')
 aarlig_vekst = []
