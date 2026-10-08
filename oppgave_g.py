@@ -35,6 +35,7 @@ with open(filnavn, 'r', encoding='utf-8') as fila:
                 slutt_periode = data[2]
         else:
             nå_lengde = 0
+            
 print(f'lengste periode uten nedbør: {lengst_periode}.\ni perioden fra {start_periode} til {slutt_periode}')
 
                 
