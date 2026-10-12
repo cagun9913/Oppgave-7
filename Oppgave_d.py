@@ -1,65 +1,99 @@
 import csv
 import matplotlib.pyplot as plt
+from datetime import datetime
 
-Tid = []
-Middeltemperatur = []
-Nedbør = []
-Høyeste_middelvind = []
-Snødybde = []
-Ferdig_lest_fil = False
+dagsdata = []
 
-try:
-    with open("sinnes_2014_2025.csv", "r", encoding="utf-8") as csvfil:
-        leser = csv.reader(csvfil, delimiter=";")
+Ønsket_årstall = input("Skriv inn ønsket årstall (2014-2025): ")
 
-        next(leser)
+def sjekk_etter_gyldig_måling_middeltemperatur():
+    try:
+        return float(rad[3])
+    except ValueError:
+        return 0.0
+
+def sjekk_etter_gyldig_måling_nedbør():
         try:
-            for rad in leser:
-
-                rad = rad.replace(",", ".")
-
-                Tid.append(rad[2])
-                Middeltemperatur.append(float(rad[3]))
-                Nedbør.append(float(rad[4]))
-                Høyeste_middelvind.append(float(rad[5]))
-                Snødybde.append(float(rad[6]))
-                
-            Ferdig_lest_fil = True
-
+            return float(rad[4])
         except ValueError:
-            print("Advarsel: ufullstendig data!")
-except FileNotFoundError:
-    print("Filen ble ikke funnet. Vennligst sjekk filbanen og prøv igjen.")
+            return 0.0
 
-if Ferdig_lest_fil == True:
-    plt.figure(figsize=(10, 5))
-
+def sjekk_etter_gyldig_måling_høyeste_middelvind():
     try:
-        plt.plot(Tid, Middeltemperatur, label="Middeltemperatur", marker="o")
+        return float(rad[5])
     except ValueError:
-        print("Advarsel: ufullstendig Middeltemperatur-data")
+        return 0.0
 
+def sjekk_etter_gyldig_måling_snødybde():
     try:
-        plt.plot(Tid, Nedbør, label="Nedbør", marker="o")
+        return float(rad[6])
     except ValueError:
-        print("Advarsel: ufullstendig Nedbør-data")
+        return 0.0
+    
+def hent_ut_dato_fra_liste(x):
+    return x[0]
 
-    try:
-        plt.plot(Tid, Høyeste_middelvind, label="Høyeste middelvind", marker="o")
-    except ValueError:
-        print("Advarsel: ufullstendig Høyeste middelvind-data")
+with open("sinnes_2014_2025.csv", "r", encoding="utf-8") as csvfil:
+    leser = csv.reader(csvfil, delimiter=";")
 
-    try:
-        plt.plot(Tid, Snødybde, label="Snødybde", marker="o")
-    except ValueError:
-        print("Advarsel: ufullstendig Snødybde-data")
+    next(leser)
 
-    plt.title(f"Sinnes {Tid[0]} til {Tid[-1]}")
-    plt.xlabel("Time")
-    plt.ylabel("middeltemperatur, nedbør, høyeste middelvind og snødybde")
-    plt.legend()
-    plt.grid(True)
+    for rad in leser:
+        rad = [verdi.replace(",", ".") for verdi in rad]
 
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.show()
+        try:
+            dato = rad[2].split(".")
+            try:
+                if 2014 <= int(Ønsket_årstall) <= 2025:
+                    if dato[2] == Ønsket_årstall:
+                        middeltemperatur = sjekk_etter_gyldig_måling_middeltemperatur()
+                        nedbør = sjekk_etter_gyldig_måling_nedbør()
+                        høyeste_middelvind = sjekk_etter_gyldig_måling_høyeste_middelvind()
+                        snødybde = sjekk_etter_gyldig_måling_snødybde()
+                        dagsdata.append((datetime.strptime(rad[2], "%d.%m.%Y"), middeltemperatur, nedbør, høyeste_middelvind, snødybde))
+                else:
+                    print(f"Advarsel: Det er ingen data for årstall {Ønsket_årstall}. Vennligst velg et årstall mellom 2014 og 2025.")
+                    exit()
+            except ValueError:
+                print(f"Advarsel: {Ønsket_årstall} er ikke et gyldig årstall. Vennligst velg et årstall mellom 2014 og 2025.")
+                exit()
+        except IndexError:
+            continue
+
+dagsdata.sort(key=hent_ut_dato_fra_liste)
+
+# Del opp i egne lister
+Tid = [dato for dato, _, _, _, _ in dagsdata]
+middeltemperatur = [middeltemperatur for _, middeltemperatur, _, _, _ in dagsdata]
+nedbør = [nedbør for _, _, nedbør, _, _ in dagsdata]
+høyeste_middelvind = [høyeste_middelvind for _, _, _, høyeste_middelvind, _ in dagsdata]
+snødybde = [snødybde for _, _, _, _, snødybde in dagsdata]
+
+fig, axs = plt.subplots(4, 1, figsize=(15, 10))
+
+axs[0].plot(Tid, middeltemperatur, color="red")
+axs[0].set_title("Middeltemperatur")
+axs[0].grid(True)
+
+axs[1].plot(Tid, nedbør, color="blue")
+axs[1].set_title("Nedbør")
+axs[1].grid(True)
+
+axs[2].plot(Tid, høyeste_middelvind, color="green")
+axs[2].set_title("Høyeste middelvind")
+axs[2].grid(True)
+
+axs[3].plot(Tid, snødybde, color="black")
+axs[3].set_title("Snødybde")
+axs[3].grid(True)
+
+import matplotlib.dates as mdates
+for ax in axs:
+    ax.xaxis.set_major_locator(mdates.MonthLocator(interval=1))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%m.%Y"))
+    ax.tick_params(axis='x', rotation=45)
+
+plt.tight_layout()
+plt.show()
+
+#Hvordan skal vi tolke "-" i snødybde? Er det null eller manglende data?
