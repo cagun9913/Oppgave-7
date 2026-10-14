@@ -10,25 +10,25 @@ def sjekk_etter_gyldig_måling_middeltemperatur():
     try:
         return float(rad[3])
     except ValueError:
-        return 0.0
+        return None
 
 def sjekk_etter_gyldig_måling_nedbør():
-        try:
-            return float(rad[4])
-        except ValueError:
-            return 0.0
+    try:
+        return float(rad[4])
+    except ValueError:
+        return None
 
 def sjekk_etter_gyldig_måling_høyeste_middelvind():
     try:
         return float(rad[5])
     except ValueError:
-        return 0.0
+        return None
 
 def sjekk_etter_gyldig_måling_snødybde():
     try:
         return float(rad[6])
     except ValueError:
-        return 0.0
+        return None
     
 def hent_ut_dato_fra_liste(x):
     return x[0]
