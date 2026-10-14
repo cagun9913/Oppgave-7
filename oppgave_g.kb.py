@@ -1,7 +1,7 @@
 # Finn og skriv ut lengde, startdato og sluttdato for den lengste
 # sammenhengende perioden uten nedbør, hvor døgnnedbør er 0.
 
-filnavn = r'øvingsoppgave 7\Oppgave-7\sinnes_2014_2025_med_makstemperatur.csv'
+filnavn = r'sinnes_2014_2025_med_makstemperatur.csv'
 
 lengst_periode = 0
 start_periode = ''

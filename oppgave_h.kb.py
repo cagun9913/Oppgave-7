@@ -3,7 +3,7 @@
 # høysommerdag har maksimaltemperatur over 25 grader og en tropedag har
 # maksimaltemperatur over 30 grader.
 
-filnavn = r'øvingsoppgave 7\Oppgave-7\sinnes_2014_2025_med_makstemperatur.csv'
+filnavn = r'sinnes_2014_2025_med_makstemperatur.csv'
 dato = input('skriv inn et valgfritt år fra 2014-2025: ')
 
 sommerdager = 0
