@@ -1,7 +1,7 @@
 import csv
 import matplotlib.pyplot as plt
 
-filstier = (
+filliste = (
     "sinnes_2014_2025_med_makstemperatur.csv",
     "oslo_blindern_1954_2025_med_makstemperatur.csv",
     "roeros_1954_2025_med_makstemperatur.csv",
@@ -12,15 +12,15 @@ filstier = (
 
 resultater = {}
 
-for filsti in filstier:
+for filnavn in filliste:
 
     try:
-        with open(filsti, encoding="utf-8") as f:
+        with open(filnavn, encoding="utf-8") as f:
             reader = csv.DictReader(f, delimiter=";")
             data = list(reader)
 
     except FileNotFoundError:
-        print(f"Fant ikke fila {filsti}")
+        print(f"Fant ikke fila {filnavn}")
         continue
 
     alle_år = sorted({
@@ -29,7 +29,7 @@ for filsti in filstier:
         if len(rad["Tid(norsk normaltid)"].split(".")) == 3
     })
 
-    resultater[filsti] = {}
+    resultater[filnavn] = {}
 
     for valgt_år in alle_år:
         antall_skifore = 0
@@ -54,7 +54,7 @@ for filsti in filstier:
 
        
         if antall_målinger >= 100:
-            resultater[filsti][valgt_år] = antall_skifore
+            resultater[filnavn][valgt_år] = antall_skifore
 
 
     
