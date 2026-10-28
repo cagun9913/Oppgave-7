@@ -59,7 +59,7 @@ for filnavn in filliste:
 
     
 
-fig, axs = plt.subplots(6, 1, figsize=(15, 15))
+fig, axs = plt.subplots(6, 1, figsize=(10, 10))
 
 for ax, (stasjon, sesonger) in zip(axs, resultater.items()):
 
