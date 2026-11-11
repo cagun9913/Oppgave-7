@@ -6,7 +6,7 @@ sommer = {}
 hoysommer = {}
 trope = {}
 
-with open("oslo_blindern_1954_2025_med_makstemperatur (1).csv", encoding="utf-8") as fil:
+with open("oslo_blindern_1954_2025_med_makstemperatur.csv", encoding="utf-8") as fil:
     leser = csv.reader(fil, delimiter=";")
 
     next(leser)
